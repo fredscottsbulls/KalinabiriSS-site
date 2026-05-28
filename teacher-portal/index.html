@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Portal | Kalinabiri Secondary School</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="login-page">
+    <!-- Animated Background -->
+    <div class="login-bg grid-bg"></div>
+    <div id="particles" style="position:fixed;inset:0;z-index:1;pointer-events:none;"></div>
+
+    <!-- Login Card -->
+    <div class="login-card" style="position:relative;z-index:10;">
+      <div class="portal-logo">
+        <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-size:1.5rem;">🏫</div>
+        <div class="portal-logo-text">Kalinabiri SS<span>Teacher Portal</span></div>
+      </div>
+
+      <h1>Welcome, Teacher</h1>
+      <p class="subtitle">Sign in to access your teacher dashboard</p>
+
+      <!-- Portal Toggle -->
+      <div class="portal-toggle">
+        <button type="button" data-role="student">Student</button>
+        <button type="button" class="active" data-role="teacher">Teacher</button>
+        <button type="button" data-role="admin">Admin</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" onsubmit="handleLogin(event, 'teacher')">
+        <div class="form-group">
+          <label class="form-label" for="username">Username / Staff ID</label>
+          <input type="text" id="username" name="username" class="form-input" placeholder="Enter your username" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.85rem;color:rgba(255,255,255,0.5);">
+            <input type="checkbox" style="accent-color:var(--accent);"> Remember me
+          </label>
+          <a href="#" class="forgot-link">Forgot password?</a>
+        </div>
+
+        <button type="submit" class="btn-full btn-primary" id="submitBtn">
+          <span>Sign In</span>
+        </button>
+      </form>
+
+      <div class="login-divider">or</div>
+
+      <div class="login-footer">
+        <a href="/" style="color:var(--accent);font-weight:600;">← Back to Website</a>
+        <span style="margin:0 8px;color:rgba(255,255,255,0.2);">|</span>
+        <a href="/student-portal/" style="color:var(--accent);font-weight:600;">Student Login</a>
+        <span style="margin:0 8px;color:rgba(255,255,255,0.2);">|</span>
+        <a href="/admin-dashboard/" style="color:var(--accent);font-weight:600;">Admin Login</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Portal toggle buttons
+    document.querySelectorAll('.portal-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.portal-toggle button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const role = btn.dataset.role;
+        const form = document.getElementById('loginForm');
+        form.setAttribute('onsubmit', `handleLogin(event, '${role}')`);
+      });
+    });
+
+    // Redirect toggle links
+    document.querySelectorAll('.portal-toggle button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const role = btn.dataset.role;
+        if (role === 'student') {
+          window.location.href = '/student-portal/';
+        } else if (role === 'admin') {
+          window.location.href = '/admin-dashboard/';
+        }
+      });
+    });
+
+    // Init particles for login page
+    initParticles('particles', 20);
+  </script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Dashboard | Kalinabiri Secondary School</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" style="position:fixed;inset:0;background:var(--primary);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+    <div class="spinner"></div>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;">Loading teacher dashboard...</p>
+  </div>
+
+  <!-- Portal Sidebar -->
+  <aside class="portal-sidebar">
+    <div class="portal-logo">
+      <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏫</div>
+      <div class="portal-logo-text">Kalinabiri SS<span>Teacher Portal</span></div>
+    </div>
+
+    <nav class="portal-nav">
+      <div class="portal-nav-section">MAIN</div>
+      <a href="#" class="portal-nav-item active" onclick="showSection('dashboard')">
+        <span class="icon">🏠</span> Dashboard
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📚</span> My Classes
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📊</span> Student Results
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📋</span> Attendance
+      </a>
+
+      <div class="portal-nav-section">TOOLS</div>
+      <a href="#" class="portal-nav-item" onclick="showToast('Opening marks entry...', 'success')">
+        <span class="icon">✏️</span> Enter Marks
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📤</span> Upload Notes
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📅</span> Timetable
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📝</span> Create Exam
+      </a>
+
+      <div class="portal-nav-section">MESSAGES</div>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📢</span> Announcements
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">✉️</span> Messages
+      </a>
+
+      <div class="portal-nav-section">Account</div>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">👤</span> My Profile
+      </a>
+      <a href="#" class="portal-nav-item" onclick="logout()">
+        <span class="icon">🚪</span> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Area -->
+  <main class="portal-main">
+    <!-- Topbar -->
+    <div class="portal-topbar">
+      <div class="portal-topbar-left">
+        <h2>Teacher Dashboard</h2>
+      </div>
+      <div class="portal-topbar-right">
+        <div class="portal-search">
+          <span>🔍</span>
+          <input type="text" placeholder="Search students, classes...">
+        </div>
+        <button style="position:relative;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-full);width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:rgba(255,255,255,0.6);cursor:pointer;">
+          🔔
+          <span style="position:absolute;top:8px;right:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid var(--primary);"></span>
+        </button>
+        <div id="userAvatar" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#fff;cursor:pointer;">TR</div>
+        <button onclick="logout()" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-full);padding:8px 16px;font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;display:flex;align-items:center;gap:6px;transition:var(--transition);">
+          🚪 Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="portal-content">
+      <!-- Stats Row -->
+      <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:32px;">
+        <div class="stat-card">
+          <div class="stat-card-icon">👨‍🎓</div>
+          <div class="stat-card-content">
+            <h3 id="totalStudents">248</h3>
+            <p>Total Students</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">🏫</div>
+          <div class="stat-card-content">
+            <h3 id="classesTaught">6</h3>
+            <p>Classes Taught</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">✏️</div>
+          <div class="stat-card-content">
+            <h3 id="pendingMarks">12</h3>
+            <p>Pending Marks</p>
+          </div>
+          <span class="stat-card-trend down">↓ Action</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">📢</div>
+          <div class="stat-card-content">
+            <h3 id="announcementsPosted">3</h3>
+            <p>Announcements Posted</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:32px;">
+        <!-- Class Performance -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">📊 Class Performance</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Subject</th>
+                    <th>Avg Score</th>
+                    <th>Pass Rate</th>
+                    <th>Trend</th>
+                  </tr>
+                </thead>
+                <tbody id="classPerfTable">
+                  <tr>
+                    <td>S.4 Physics</td>
+                    <td>Physics</td>
+                    <td>72%</td>
+                    <td><span class="badge badge-success">78%</span></td>
+                    <td><span style="color:var(--success);">↑ 3%</span></td>
+                  </tr>
+                  <tr>
+                    <td>S.4 Chemistry</td>
+                    <td>Chemistry</td>
+                    <td>68%</td>
+                    <td><span class="badge badge-info">71%</span></td>
+                    <td><span style="color:var(--success);">↑ 1%</span></td>
+                  </tr>
+                  <tr>
+                    <td>S.5 Physics</td>
+                    <td>Physics</td>
+                    <td>75%</td>
+                    <td><span class="badge badge-success">82%</span></td>
+                    <td><span style="color:var(--success);">↑ 5%</span></td>
+                  </tr>
+                  <tr>
+                    <td>S.6 Biology</td>
+                    <td>Biology</td>
+                    <td>70%</td>
+                    <td><span class="badge badge-info">74%</span></td>
+                    <td><span style="color:var(--danger);">↓ 2%</span></td>
+                  </tr>
+                  <tr>
+                    <td>S.3 Mathematics</td>
+                    <td>Mathematics</td>
+                    <td>64%</td>
+                    <td><span class="badge badge-warning">65%</span></td>
+                    <td><span style="color:var(--success);">↑ 4%</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Submissions -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">📤 Recent Submissions</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Student</th>
+                    <th>Class</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Achan Sarah</td>
+                    <td>S.4 Physics</td>
+                    <td><span class="badge badge-success">Submitted</span></td>
+                  </tr>
+                  <tr>
+                    <td>Mwesigye John</td>
+                    <td>S.5 Physics</td>
+                    <td><span class="badge badge-warning">Pending</span></td>
+                  </tr>
+                  <tr>
+                    <td>Nakato Faith</td>
+                    <td>S.4 Chemistry</td>
+                    <td><span class="badge badge-success">Submitted</span></td>
+                  </tr>
+                  <tr>
+                    <td>Okello Peter</td>
+                    <td>S.6 Biology</td>
+                    <td><span class="badge badge-danger">Late</span></td>
+                  </tr>
+                  <tr>
+                    <td>Amumpire Grace</td>
+                    <td>S.3 Math</td>
+                    <td><span class="badge badge-success">Submitted</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="glass-card">
+        <div class="glass-card-body">
+          <h3 style="font-size:1rem;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:8px;">⚡ Quick Actions</h3>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;">
+            <button onclick="showToast('Opening marks entry...', 'success')" style="padding:24px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:10px;">
+              <span style="font-size:1.75rem;">✏️</span>
+              <span style="font-size:0.85rem;font-weight:600;">Enter Marks</span>
+            </button>
+            <button onclick="showToast('Upload dialog opened', 'success')" style="padding:24px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:10px;">
+              <span style="font-size:1.75rem;">📤</span>
+              <span style="font-size:0.85rem;font-weight:600;">Upload Notes</span>
+            </button>
+            <button onclick="showToast('Announcement composer opened', 'success')" style="padding:24px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:10px;">
+              <span style="font-size:1.75rem;">📢</span>
+              <span style="font-size:0.85rem;font-weight:600;">Post Announcement</span>
+            </button>
+            <button onclick="showToast('Loading your timetable...', 'success')" style="padding:24px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:10px;">
+              <span style="font-size:1.75rem;">📅</span>
+              <span style="font-size:0.85rem;font-weight:600;">View Timetable</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Check auth
+    if (!localStorage.getItem('kalina_token')) {
+      window.location.href = '/teacher-portal/';
+    }
+
+    // Load user data
+    function loadUserData() {
+      const user = getUser();
+      if (user) {
+        const firstName = user.firstName || user.name?.split(' ')[0] || 'Teacher';
+        const initials = (user.firstName?.[0] || 'T') + (user.lastName?.[0] || 'R');
+        document.getElementById('userAvatar').textContent = initials.toUpperCase();
+      }
+    }
+
+    // Load students count
+    async function loadStudents() {
+      try {
+        const data = await apiCall('/api/admin/users?role=student');
+        if (data.users) {
+          document.getElementById('totalStudents').textContent = data.users.length;
+        }
+      } catch (e) {
+        // Use mock data
+      }
+    }
+
+    // Load classes
+    async function loadClasses() {
+      try {
+        const data = await apiCall('/api/classes');
+        if (data.classes) {
+          document.getElementById('classesTaught').textContent = data.classes.length;
+        }
+      } catch (e) {
+        // Use mock data
+      }
+    }
+
+    // Load announcements count
+    async function loadAnnouncements() {
+      try {
+        const data = await apiCall('/api/announcements');
+        if (data.announcements) {
+          document.getElementById('announcementsPosted').textContent = data.announcements.length;
+        }
+      } catch (e) {
+        // Use mock data
+      }
+    }
+
+    // Section navigation
+    function showSection(section) {
+      document.querySelectorAll('.portal-nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.portal-nav-item').classList.add('active');
+      showToast(`Navigating to ${section}...`, 'success');
+    }
+
+    // Init on load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadUserData();
+      loadStudents();
+      loadClasses();
+      loadAnnouncements();
+
+      // Hide loading
+      setTimeout(() => {
+        document.getElementById('loadingOverlay').style.opacity = '0';
+        document.getElementById('loadingOverlay').style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+          document.getElementById('loadingOverlay').style.display = 'none';
+        }, 500);
+      }, 800);
+    });
+
+    // Make showSection global
+    window.showSection = showSection;
+  </script>
+</body>
+</html>

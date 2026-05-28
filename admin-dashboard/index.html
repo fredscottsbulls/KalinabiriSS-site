@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | Kalinabiri Secondary School</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" style="position:fixed;inset:0;background:var(--primary);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+    <div class="spinner"></div>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;">Loading admin panel...</p>
+  </div>
+
+  <!-- Admin Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="admin-logo">
+      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-size:1.1rem;">🏫</div>
+      <div class="admin-logo-text">Kalinabiri SS<span>Admin Panel</span></div>
+    </div>
+
+    <nav class="admin-nav">
+      <div class="admin-nav-section">DASHBOARD</div>
+      <a href="#" class="admin-nav-item active">
+        <span class="icon">🏠</span> Overview
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">📊</span> Analytics
+      </a>
+
+      <div class="admin-nav-section">USERS</div>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">👨‍🎓</span> Students
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">👨‍🏫</span> Teachers
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">👨‍👩‍👧</span> Parents
+      </a>
+
+      <div class="admin-nav-section">ACADEMICS</div>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">🏫</span> Classes
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">📚</span> Subjects
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">📅</span> Timetable
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">📊</span> Results
+      </a>
+
+      <div class="admin-nav-section">ADMIN</div>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">📝</span> Admissions
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">💰</span> Fees
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">📋</span> Attendance
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">📢</span> Announcements
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">📰</span> News
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">🖼️</span> Gallery
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">✉️</span> Messages
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">🌐</span> Site Content
+      </a>
+
+      <div class="admin-nav-section">SYSTEM</div>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">⚙️</span> Settings
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">🔐</span> User Management
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">📜</span> Audit Log
+      </a>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">☁️</span> Backup
+      </a>
+
+      <div class="admin-nav-section">Account</div>
+      <a href="#" class="admin-nav-item">
+        <span class="icon">👤</span> Profile
+      </a>
+      <a href="#" class="admin-nav-item" onclick="logout()">
+        <span class="icon">🚪</span> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Area -->
+  <main class="admin-main">
+    <!-- Admin Topbar -->
+    <div class="admin-topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span style="font-size:0.85rem;color:rgba(255,255,255,0.4);">Admin</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="admin-search">
+          <span>🔍</span>
+          <input type="text" placeholder="Search students, teachers, news...">
+        </div>
+        <button style="position:relative;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-full);width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:rgba(255,255,255,0.6);cursor:pointer;">
+          🔔
+          <span style="position:absolute;top:8px;right:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid var(--primary);"></span>
+        </button>
+        <div id="adminAvatar" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#fff;cursor:pointer;">AD</div>
+        <button onclick="logout()" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-full);padding:8px 16px;font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;display:flex;align-items:center;gap:6px;transition:var(--transition);">
+          🚪 Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- Admin Content -->
+    <div class="admin-content">
+      <!-- Stats Grid -->
+      <div class="stats-grid" style="grid-template-columns:repeat(6,1fr);margin-bottom:28px;">
+        <div class="stat-card">
+          <div class="stat-card-icon">👨‍🎓</div>
+          <div class="stat-card-content">
+            <h3 id="totalStudents">1,247</h3>
+            <p>Total Students</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">👨‍🏫</div>
+          <div class="stat-card-content">
+            <h3 id="totalTeachers">86</h3>
+            <p>Teachers</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">📝</div>
+          <div class="stat-card-content">
+            <h3 id="newAdmissions">34</h3>
+            <p>New Admissions (30d)</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">💰</div>
+          <div class="stat-card-content">
+            <h3 id="feeCollection">UGX 128M</h3>
+            <p>Fee Collection</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">⏳</div>
+          <div class="stat-card-content">
+            <h3 id="pendingFees">UGX 24M</h3>
+            <p>Pending Fees</p>
+          </div>
+          <span class="stat-card-trend down">↑ 5%</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">📰</div>
+          <div class="stat-card-content">
+            <h3 id="publishedNews">12</h3>
+            <p>Published News</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="glass-card" style="margin-bottom:28px;">
+        <div class="glass-card-body">
+          <h3 style="font-size:0.95rem;font-weight:700;margin-bottom:16px;">⚡ Quick Actions</h3>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button onclick="showToast('Add student form opened', 'success')" style="padding:10px 20px;background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;border-radius:var(--radius-full);font-size:0.8rem;font-weight:600;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;transition:var(--transition);">
+              ➕ Add Student
+            </button>
+            <button onclick="showToast('Announcement composer opened', 'success')" style="padding:10px 20px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-full);font-size:0.8rem;font-weight:600;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;transition:var(--transition);">
+              📢 Post Announcement
+            </button>
+            <button onclick="showToast('Fee management opened', 'success')" style="padding:10px 20px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-full);font-size:0.8rem;font-weight:600;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;transition:var(--transition);">
+              💰 Manage Fees
+            </button>
+            <button onclick="showToast('Generating reports...', 'success')" style="padding:10px 20px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-full);font-size:0.8rem;font-weight:600;color:#fff;cursor:pointer;display:flex;align-items:center;gap:8px;transition:var(--transition);">
+              📊 View Reports
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:28px;">
+        <!-- Recent Activity -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">📜 Recent Activity</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Action</th>
+                    <th>Entity</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody id="activityTable">
+                  <tr><td>admin@kalina.edu</td><td>Created</td><td>Student: Nakato Grace</td><td>2 min ago</td></tr>
+                  <tr><td>admin@kalina.edu</td><td>Updated</td><td>Fee structure S.4</td><td>18 min ago</td></tr>
+                  <tr><td>admin@kalina.edu</td><td>Published</td><td>News: Science Fair 2026</td><td>1 hr ago</td></tr>
+                  <tr><td>admin@kalina.edu</td><td>Deleted</td><td>Old announcement</td><td>2 hrs ago</td></tr>
+                  <tr><td>admin@kalina.edu</td><td>Created</td><td>Teacher: Mr. Ouma</td><td>3 hrs ago</td></tr>
+                  <tr><td>admin@kalina.edu</td><td>Updated</td><td>Timetable S.5</td><td>5 hrs ago</td></tr>
+                  <tr><td>admin@kalina.edu</td><td>Approved</td><td>Admission: S.1 2026</td><td>Yesterday</td></tr>
+                  <tr><td>admin@kalina.edu</td><td>Uploaded</td><td>Results: Term 1</td><td>Yesterday</td></tr>
+                  <tr><td>admin@kalina.edu</td><td>Created</td><td>Announcement: Exams</td><td>2 days ago</td></tr>
+                  <tr><td>admin@kalina.edu</td><td>Updated</td><td>Class: S.4 Physics</td><td>3 days ago</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Users Overview -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">👥 Users Overview</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;">
+              <div style="padding:16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);text-align:center;">
+                <p style="font-size:1.5rem;font-weight:800;color:var(--accent);" id="studentCount">1,247</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Students</p>
+              </div>
+              <div style="padding:16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);text-align:center;">
+                <p style="font-size:1.5rem;font-weight:800;color:var(--accent-2);" id="teacherCount">86</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Teachers</p>
+              </div>
+            </div>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Recent Registrations</th>
+                    <th>Role</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Nakato Grace</td><td><span class="badge badge-accent">Student</span></td></tr>
+                  <tr><td>Mr. Ouma Peter</td><td><span class="badge badge-info">Teacher</span></td></tr>
+                  <tr><td>Wasswa Isaac</td><td><span class="badge badge-accent">Student</span></td></tr>
+                  <tr><td>Namuli Jane</td><td><span class="badge badge-accent">Student</span></td></tr>
+                  <tr><td>Dr. Ssekitoleko</td><td><span class="badge badge-info">Teacher</span></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Announcements & News -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+        <!-- Announcements Management -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h3 style="font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px;">📢 Announcements</h3>
+              <button onclick="showToast('Announcement composer opened', 'success')" style="padding:6px 14px;background:var(--accent);border:none;border-radius:var(--radius-full);font-size:0.75rem;font-weight:600;color:var(--primary);cursor:pointer;">+ New</button>
+            </div>
+            <div id="announcementsList" style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+                <div>
+                  <p style="font-size:0.85rem;font-weight:600;">Term 2 Exams Schedule</p>
+                  <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);">May 25, 2026 · Academic</p>
+                </div>
+                <button onclick="showToast('Announcement deleted', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:1rem;padding:4px;">🗑️</button>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+                <div>
+                  <p style="font-size:0.85rem;font-weight:600;">Fee Payment Deadline</p>
+                  <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);">May 20, 2026 · Finance</p>
+                </div>
+                <button onclick="showToast('Announcement deleted', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:1rem;padding:4px;">🗑️</button>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+                <div>
+                  <p style="font-size:0.85rem;font-weight:600;">Science Fair 2026</p>
+                  <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);">May 18, 2026 · Event</p>
+                </div>
+                <button onclick="showToast('Announcement deleted', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:1rem;padding:4px;">🗑️</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- News Management -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+              <h3 style="font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px;">📰 News</h3>
+              <button onclick="showToast('News editor opened', 'success')" style="padding:6px 14px;background:var(--accent);border:none;border-radius:var(--radius-full);font-size:0.75rem;font-weight:600;color:var(--primary);cursor:pointer;">+ New</button>
+            </div>
+            <div id="newsList" style="display:flex;flex-direction:column;gap:10px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+                <div>
+                  <p style="font-size:0.85rem;font-weight:600;">Kalinabiri Wins National Debate</p>
+                  <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);">May 22, 2026 · Academic</p>
+                </div>
+                <div style="display:flex;gap:4px;">
+                  <button onclick="showToast('News editor opened', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.9rem;padding:4px;">✏️</button>
+                  <button onclick="showToast('News deleted', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.9rem;padding:4px;">🗑️</button>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+                <div>
+                  <p style="font-size:0.85rem;font-weight:600;">New Science Lab Opening</p>
+                  <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);">May 15, 2026 · Infrastructure</p>
+                </div>
+                <div style="display:flex;gap:4px;">
+                  <button onclick="showToast('News editor opened', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.9rem;padding:4px;">✏️</button>
+                  <button onclick="showToast('News deleted', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.9rem;padding:4px;">🗑️</button>
+                </div>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+                <div>
+                  <p style="font-size:0.85rem;font-weight:600;">Inter-House Sports 2026</p>
+                  <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);">May 10, 2026 · Sports</p>
+                </div>
+                <div style="display:flex;gap:4px;">
+                  <button onclick="showToast('News editor opened', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.9rem;padding:4px;">✏️</button>
+                  <button onclick="showToast('News deleted', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.9rem;padding:4px;">🗑️</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Check auth
+    if (!localStorage.getItem('admin_token') && !localStorage.getItem('kalina_token')) {
+      window.location.href = '/admin-dashboard/';
+    }
+
+    // Load admin data
+    function loadAdminData() {
+      const user = getUser();
+      if (user) {
+        const initials = (user.firstName?.[0] || 'A') + (user.lastName?.[0] || 'D');
+        document.getElementById('adminAvatar').textContent = initials.toUpperCase();
+      }
+    }
+
+    // Load stats from API
+    async function loadStats() {
+      try {
+        const data = await apiCall('/api/admin/stats');
+        if (data.totalStudents) document.getElementById('totalStudents').textContent = data.totalStudents.toLocaleString();
+        if (data.totalTeachers) document.getElementById('totalTeachers').textContent = data.totalTeachers;
+        if (data.newAdmissions) document.getElementById('newAdmissions').textContent = data.newAdmissions;
+        if (data.feeCollection) document.getElementById('feeCollection').textContent = 'UGX ' + (data.feeCollection / 1000000).toFixed(0) + 'M';
+        if (data.pendingFees) document.getElementById('pendingFees').textContent = 'UGX ' + (data.pendingFees / 1000000).toFixed(0) + 'M';
+        if (data.publishedNews) document.getElementById('publishedNews').textContent = data.publishedNews;
+      } catch (e) {
+        // Use mock data
+      }
+    }
+
+    // Load users
+    async function loadUsers() {
+      try {
+        const data = await apiCall('/api/admin/users');
+        if (data.users) {
+          const students = data.users.filter(u => u.role === 'student');
+          const teachers = data.users.filter(u => u.role === 'teacher');
+          document.getElementById('studentCount').textContent = students.length.toLocaleString();
+          document.getElementById('teacherCount').textContent = teachers.length;
+        }
+      } catch (e) {
+        // Use mock data
+      }
+    }
+
+    // Load announcements from API
+    async function loadAnnouncements() {
+      try {
+        const data = await apiCall('/api/admin/announcements');
+        if (data.announcements && data.announcements.length > 0) {
+          const list = document.getElementById('announcementsList');
+          list.innerHTML = data.announcements.slice(0, 5).map(a => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+              <div>
+                <p style="font-size:0.85rem;font-weight:600;">${a.title || 'Announcement'}</p>
+                <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${new Date(a.createdAt).toLocaleDateString()} · ${a.category || 'General'}</p>
+              </div>
+              <button onclick="showToast('Announcement deleted', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:1rem;padding:4px;">🗑️</button>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        // Use mock data
+      }
+    }
+
+    // Load news from API
+    async function loadNews() {
+      try {
+        const data = await apiCall('/api/admin/news');
+        if (data.news && data.news.length > 0) {
+          const list = document.getElementById('newsList');
+          list.innerHTML = data.news.slice(0, 5).map(n => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 14px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+              <div>
+                <p style="font-size:0.85rem;font-weight:600;">${n.title || 'News'}</p>
+                <p style="font-size:0.7rem;color:rgba(255,255,255,0.4);">${new Date(n.createdAt).toLocaleDateString()} · ${n.category || 'General'}</p>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <button onclick="showToast('News editor opened', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.9rem;padding:4px;">✏️</button>
+                <button onclick="showToast('News deleted', 'success')" style="background:none;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:0.9rem;padding:4px;">🗑️</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        // Use mock data
+      }
+    }
+
+    // Load activity log
+    async function loadActivity() {
+      try {
+        const data = await apiCall('/api/admin/activities');
+        if (data.activities && data.activities.length > 0) {
+          const tbody = document.getElementById('activityTable');
+          tbody.innerHTML = data.activities.slice(0, 10).map(a => `
+            <tr>
+              <td>${a.user || 'admin@kalina.edu'}</td>
+              <td>${a.action || 'Updated'}</td>
+              <td>${a.entity || ''}</td>
+              <td>${a.time || 'Recently'}</td>
+            </tr>
+          `).join('');
+        }
+      } catch (e) {
+        // Use mock data
+      }
+    }
+
+    // Admin sidebar nav active state
+    document.querySelectorAll('.admin-nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        if (item.getAttribute('onclick') === 'logout()') return;
+        e.preventDefault();
+        document.querySelectorAll('.admin-nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        showToast('Navigating...', 'success');
+      });
+    });
+
+    // Init on load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadAdminData();
+      loadStats();
+      loadUsers();
+      loadAnnouncements();
+      loadNews();
+      loadActivity();
+
+      // Hide loading
+      setTimeout(() => {
+        document.getElementById('loadingOverlay').style.opacity = '0';
+        document.getElementById('loadingOverlay').style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+          document.getElementById('loadingOverlay').style.display = 'none';
+        }, 500);
+      }, 1000);
+    });
+  </script>
+</body>
+</html>

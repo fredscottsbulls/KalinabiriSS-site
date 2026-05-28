@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Dashboard | Kalinabiri Secondary School</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Loading Overlay -->
+  <div id="loadingOverlay" style="position:fixed;inset:0;background:var(--primary);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+    <div class="spinner"></div>
+    <p style="color:rgba(255,255,255,0.5);font-size:0.9rem;">Loading your dashboard...</p>
+  </div>
+
+  <!-- Portal Sidebar -->
+  <aside class="portal-sidebar">
+    <div class="portal-logo">
+      <div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-size:1.2rem;">🏫</div>
+      <div class="portal-logo-text">Kalinabiri SS<span>Student Portal</span></div>
+    </div>
+
+    <nav class="portal-nav">
+      <div class="portal-nav-section">MAIN</div>
+      <a href="#" class="portal-nav-item active" onclick="showSection('dashboard')">
+        <span class="icon">🏠</span> Dashboard
+      </a>
+      <a href="#" class="portal-nav-item" onclick="showSection('results')">
+        <span class="icon">📊</span> My Results
+      </a>
+      <a href="#" class="portal-nav-item" onclick="showSection('attendance')">
+        <span class="icon">📋</span> Attendance
+      </a>
+
+      <div class="portal-nav-section">LEARNING</div>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📅</span> Timetable
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📝</span> Assignments
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📚</span> Library
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">🎓</span> E-Learning
+      </a>
+
+      <div class="portal-nav-section">FINANCES</div>
+      <a href="#" class="portal-nav-item" onclick="showSection('fees')">
+        <span class="icon">💰</span> Fees
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">📜</span> Payment History
+      </a>
+
+      <div class="portal-nav-section">LIFE</div>
+      <a href="#" class="portal-nav-item" onclick="showSection('announcements')">
+        <span class="icon">📢</span> Announcements
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">✉️</span> Messages
+      </a>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">🔔</span> Notifications
+      </a>
+
+      <div class="portal-nav-section">Account</div>
+      <a href="#" class="portal-nav-item">
+        <span class="icon">👤</span> My Profile
+      </a>
+      <a href="#" class="portal-nav-item" onclick="logout()">
+        <span class="icon">🚪</span> Logout
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Area -->
+  <main class="portal-main">
+    <!-- Topbar -->
+    <div class="portal-topbar">
+      <div class="portal-topbar-left">
+        <h2>Dashboard</h2>
+      </div>
+      <div class="portal-topbar-right">
+        <div class="portal-search">
+          <span>🔍</span>
+          <input type="text" placeholder="Search...">
+        </div>
+        <button style="position:relative;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-full);width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:rgba(255,255,255,0.6);cursor:pointer;">
+          🔔
+          <span style="position:absolute;top:8px;right:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid var(--primary);"></span>
+        </button>
+        <div id="userAvatar" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;color:#fff;cursor:pointer;">ST</div>
+        <button onclick="logout()" style="background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius-full);padding:8px 16px;font-size:0.8rem;font-weight:600;color:rgba(255,255,255,0.6);cursor:pointer;display:flex;align-items:center;gap:6px;transition:var(--transition);">
+          🚪 Logout
+        </button>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="portal-content">
+      <!-- Greeting -->
+      <div class="portal-greeting">
+        <h1 id="greetingText">Good Morning, Student</h1>
+        <p id="greetingDate">Thursday, May 28, 2026 — Term 2, 2026</p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-card-icon">📊</div>
+          <div class="stat-card-content">
+            <h3 id="gpaValue">3.75</h3>
+            <p>Current Term GPA</p>
+          </div>
+          <span class="stat-card-trend up">↑ 0.15</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">📋</div>
+          <div class="stat-card-content">
+            <h3 id="attendanceValue">94%</h3>
+            <p>Attendance Rate</p>
+          </div>
+          <span class="stat-card-trend up">↑ 2%</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">💰</div>
+          <div class="stat-card-content">
+            <h3 id="feesValue">UGX 480,000</h3>
+            <p>Outstanding Fees</p>
+          </div>
+          <span class="stat-card-trend down">↓ Due</span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-card-icon">📝</div>
+          <div class="stat-card-content">
+            <h3 id="examValue">12 Days</h3>
+            <p>Next Exam Countdown</p>
+          </div>
+          <span class="stat-card-trend" style="background:rgba(59,130,246,0.15);color:var(--info);">Jun 9</span>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px;margin-bottom:32px;">
+        <!-- Recent Results -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">📊 Recent Results</h3>
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Subject</th>
+                    <th>Score</th>
+                    <th>Grade</th>
+                    <th>Position</th>
+                  </tr>
+                </thead>
+                <tbody id="resultsTable">
+                  <tr><td>Mathematics</td><td>87/100</td><td><span class="badge badge-success">A</span></td><td>#3 / 45</td></tr>
+                  <tr><td>English Literature</td><td>82/100</td><td><span class="badge badge-success">A-</span></td><td>#5 / 45</td></tr>
+                  <tr><td>Physics</td><td>78/100</td><td><span class="badge badge-info">B+</span></td><td>#8 / 45</td></tr>
+                  <tr><td>Chemistry</td><td>75/100</td><td><span class="badge badge-info">B</span></td><td>#12 / 45</td></tr>
+                  <tr><td>History</td><td>91/100</td><td><span class="badge badge-success">A+</span></td><td>#1 / 45</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Announcements Preview -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">📢 Latest Announcements</h3>
+            <div id="announcementsList" style="display:flex;flex-direction:column;gap:12px;">
+              <div class="glass-card-body" style="padding:16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+                <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+                  <span style="font-weight:600;font-size:0.85rem;">Term 2 Exams Schedule</span>
+                  <span class="badge badge-accent" style="font-size:0.6rem;">Academic</span>
+                </div>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">May 25, 2026</p>
+                <p style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:6px;">Exams begin June 9th. Check the full schedule in your timetable...</p>
+              </div>
+              <div class="glass-card-body" style="padding:16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+                <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+                  <span style="font-weight:600;font-size:0.85rem;">Fee Payment Deadline</span>
+                  <span class="badge badge-warning" style="font-size:0.6rem;">Finance</span>
+                </div>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">May 20, 2026</p>
+                <p style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:6px;">Final deadline for Term 2 fees is June 1st. Avoid late penalties...</p>
+              </div>
+              <div class="glass-card-body" style="padding:16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+                <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+                  <span style="font-weight:600;font-size:0.85rem;">Science Fair 2026</span>
+                  <span class="badge badge-success" style="font-size:0.6rem;">Event</span>
+                </div>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">May 18, 2026</p>
+                <p style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:6px;">Register for the annual science fair by June 5th. Great prizes!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px;">
+        <!-- Upcoming Events -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">📅 Upcoming Events</h3>
+            <div style="position:relative;padding-left:24px;">
+              <div style="position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--glass-border);"></div>
+              <div style="position:relative;margin-bottom:20px;">
+                <div style="position:absolute;left:-22px;width:16px;height:16px;border-radius:50%;background:var(--accent);border:3px solid var(--primary);"></div>
+                <p style="font-size:0.7rem;color:var(--accent);font-weight:700;">JUN 9</p>
+                <p style="font-size:0.875rem;font-weight:600;margin-top:2px;">Term 2 Examinations Begin</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Mathematics, English — Day 1</p>
+              </div>
+              <div style="position:relative;margin-bottom:20px;">
+                <div style="position:absolute;left:-22px;width:16px;height:16px;border-radius:50%;background:var(--accent-2);border:3px solid var(--primary);"></div>
+                <p style="font-size:0.7rem;color:var(--accent-2);font-weight:700;">JUN 14</p>
+                <p style="font-size:0.875rem;font-weight:600;margin-top:2px;">Science Fair Submission Deadline</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Submit project proposals by 4:00 PM</p>
+              </div>
+              <div style="position:relative;margin-bottom:20px;">
+                <div style="position:absolute;left:-22px;width:16px;height:16px;border-radius:50%;background:var(--gold);border:3px solid var(--primary);"></div>
+                <p style="font-size:0.7rem;color:var(--gold);font-weight:700;">JUN 21</p>
+                <p style="font-size:0.875rem;font-weight:600;margin-top:2px;">Speech Day & Prize Giving</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Annual ceremony — 9:00 AM Main Hall</p>
+              </div>
+              <div style="position:relative;">
+                <div style="position:absolute;left:-22px;width:16px;height:16px;border-radius:50%;background:var(--success);border:3px solid var(--primary);"></div>
+                <p style="font-size:0.7rem;color:var(--success);font-weight:700;">JUL 5</p>
+                <p style="font-size:0.875rem;font-weight:600;margin-top:2px;">Term 2 Ends</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">Results release & report cards</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="glass-card">
+          <div class="glass-card-body">
+            <h3 style="font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px;">⚡ Quick Actions</h3>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <button onclick="showToast('Timetable opened', 'success')" style="padding:20px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <span style="font-size:1.5rem;">📅</span>
+                <span style="font-size:0.8rem;font-weight:600;">View Timetable</span>
+              </button>
+              <button onclick="showToast('Generating report...', 'success')" style="padding:20px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <span style="font-size:1.5rem;">📥</span>
+                <span style="font-size:0.8rem;font-weight:600;">Download Report</span>
+              </button>
+              <button onclick="showToast('Redirecting to payments...', 'success')" style="padding:20px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <span style="font-size:1.5rem;">💳</span>
+                <span style="font-size:0.8rem;font-weight:600;">Pay Fees</span>
+              </button>
+              <button onclick="showToast('Messages opened', 'success')" style="padding:20px 16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;align-items:center;gap:8px;">
+                <span style="font-size:1.5rem;">✉️</span>
+                <span style="font-size:0.8rem;font-weight:600;">Message Teacher</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    // Check auth
+    if (!localStorage.getItem('kalina_token')) {
+      window.location.href = '/student-portal/';
+    }
+
+    // Load user data
+    function loadUserData() {
+      const user = getUser();
+      if (user) {
+        const firstName = user.firstName || user.name?.split(' ')[0] || 'Student';
+        document.getElementById('greetingText').textContent = `Good Morning, ${firstName}`;
+        const initials = (user.firstName?.[0] || 'S') + (user.lastName?.[0] || 'T');
+        document.getElementById('userAvatar').textContent = initials.toUpperCase();
+      }
+    }
+
+    // Set current date
+    function setDate() {
+      const now = new Date();
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('greetingDate').textContent = `${now.toLocaleDateString('en-US', options)} — Term 2, 2026`;
+    }
+
+    // Load announcements
+    async function loadAnnouncements() {
+      try {
+        const data = await apiCall('/api/announcements');
+        if (data.announcements && data.announcements.length > 0) {
+          const list = document.getElementById('announcementsList');
+          list.innerHTML = data.announcements.slice(0, 3).map(a => `
+            <div class="glass-card-body" style="padding:16px;background:var(--glass-bg);border:1px solid var(--glass-border);border-radius:var(--radius);">
+              <div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:6px;">
+                <span style="font-weight:600;font-size:0.85rem;">${a.title || 'Announcement'}</span>
+                <span class="badge badge-accent" style="font-size:0.6rem;">${a.category || 'General'}</span>
+              </div>
+              <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">${new Date(a.createdAt).toLocaleDateString()}</p>
+              <p style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:6px;">${a.content?.substring(0, 80)}...</p>
+            </div>
+          `).join('');
+        }
+      } catch (e) {
+        // Use mock data on error
+      }
+    }
+
+    // Load notifications
+    async function loadNotifications() {
+      try {
+        const data = await apiCall('/api/notifications');
+        // Badge handled by API data
+      } catch (e) {
+        // Silent fail
+      }
+    }
+
+    // Section navigation
+    function showSection(section) {
+      document.querySelectorAll('.portal-nav-item').forEach(item => item.classList.remove('active'));
+      event.target.closest('.portal-nav-item').classList.add('active');
+      showToast(`Navigating to ${section}...`, 'success');
+    }
+
+    // Init on load
+    document.addEventListener('DOMContentLoaded', () => {
+      loadUserData();
+      setDate();
+      loadAnnouncements();
+      loadNotifications();
+
+      // Hide loading
+      setTimeout(() => {
+        document.getElementById('loadingOverlay').style.opacity = '0';
+        document.getElementById('loadingOverlay').style.transition = 'opacity 0.5s ease';
+        setTimeout(() => {
+          document.getElementById('loadingOverlay').style.display = 'none';
+        }, 500);
+      }, 800);
+    });
+
+    // Make showSection global
+    window.showSection = showSection;
+  </script>
+</body>
+</html>
